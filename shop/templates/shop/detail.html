@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product_object.title }} - Product Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+
+    <!-- Back Button -->
+    <div class="container mx-auto px-4 py-4">
+        <a href="{% url 'index' %}" class="text-blue-600 hover:underline">&larr; Back to Products</a>
+    </div>
+
+    <!-- Product Details -->
+    <div class="container mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8 bg-white rounded-xl shadow-lg">
+        <!-- Product Image -->
+        <div class="w-full">
+            <img src="{{ product_object.image }}" alt="{{ product_object.title }}" class="w-full aspect-square object-cover rounded-xl">
+        </div>
+
+        <!-- Product Info -->
+        <div class="flex flex-col justify-between">
+            <div>
+                <h1 class="text-3xl font-bold mb-4">{{ product_object.title }}</h1>
+                <p class="text-gray-700 mb-4">{{ product_object.description }}</p>
+                <p class="text-blue-600 uppercase text-sm mb-2">{{ product_object.category }}</p>
+
+                <div class="flex items-center space-x-4 mb-6">
+                    <p class="text-green-600 text-xl font-bold">$ {{ product_object.discount_price }}</p>
+                    <p class="line-through text-gray-500 text-sm">$ {{ product_object.price }}</p>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <button class="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition text-lg font-semibold">
+                    Add to Cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
