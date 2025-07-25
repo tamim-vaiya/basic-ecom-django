@@ -26,8 +26,6 @@
         </div>
     </nav>
 
-
-
     {% comment %} Search Bar {% endcomment %}
     <div class="container mx-auto px-4 py-8">
         <form method="GET" action="" class="max-w-md mx-auto">
@@ -105,6 +103,15 @@
         document.getElementById("nav-cart").innerHTML = "Cart(" + Object.keys(cart).length + ")";
 
     })
+
+    // Update the nav-cart count on page load
+    document.addEventListener("DOMContentLoaded", function () {
+        if (localStorage.getItem('cart')) {
+            const cart = JSON.parse(localStorage.getItem('cart'));
+            document.getElementById("nav-cart").innerHTML = "Cart(" + Object.keys(cart).length + ")";
+        }
+    });
+
 
 </script>
 </html>
