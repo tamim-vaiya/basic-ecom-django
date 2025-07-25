@@ -6,25 +6,35 @@
     <title>Ecom Shop</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
 
     {% comment %} NavBar {% endcomment %}
-    <nav class="bg-white shadow-md">
-        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
-            <!-- Left side: Brand name -->
-            <div class="text-2xl font-bold text-gray-600">
-            ShopName
-            </div>
+    <nav class="bg-white shadow p-4 flex justify-between items-center">
+        <div class="text-xl font-bold">ShopName</div>
 
-            <!-- Right side: Navigation links -->
-            <div class="space-x-6">
-            <a href="#" class="text-gray-600 hover:text-blue-500 transition">Link1</a>
-            <a href="#" class="text-gray-600 hover:text-blue-500 transition">Link2</a>
-            <a id="nav-cart" href="#" class="text-gray-600 hover:text-blue-500 transition">Cart(0)</a>
+        <div class="flex items-center space-x-6">
+            <a href="#" class="text-gray-700 hover:text-blue-600">Link1</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600">Link2</a>
+            <!-- Cart with Popover -->
+            <div x-data="{ open: false }" class="relative">
+                <button @click="open = !open" class="text-gray-700 hover:text-blue-600 focus:outline-none" id="nav-cart">
+                    Cart(0)
+                </button>
+
+                <!-- Popover -->
+                <div
+                    x-show="open"
+                    @click.outside="open = false"
+                    x-transition
+                    class="absolute right-0 mt-2 w-48 bg-white shadow-md border rounded p-4 text-sm z-50">
+                    This is a popover
+                </div>
             </div>
         </div>
     </nav>
+
 
     {% comment %} Search Bar {% endcomment %}
     <div class="container mx-auto px-4 py-8">
