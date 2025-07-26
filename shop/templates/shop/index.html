@@ -12,7 +12,7 @@
 
     {% comment %} NavBar {% endcomment %}
     <nav class="bg-white shadow p-4 flex justify-between items-center">
-        <div class="text-xl font-bold">ShopName</div>
+        <div class="text-xl font-bold">The Goods Co.</div>
 
         <div class="flex items-center space-x-6">
             <a href="#" class="text-gray-700 hover:text-blue-600">Link1</a>
@@ -28,8 +28,12 @@
                     x-show="open"
                     @click.outside="open = false"
                     x-transition
-                    class="absolute right-0 mt-2 w-48 bg-white shadow-md border rounded p-4 text-sm z-50">
-                    This is a popover
+                    class="absolute right-0 mt-2 w-80 bg-white shadow-md border rounded p-4 text-sm z-50"
+                >
+                    <h1 class="font-bold text-xl mb-3">Your Cart</h1>
+                    <div id="cart-popover-content" class="space-y-2 text-sm">
+                        <p class="text-gray-500">Your cart is empty.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -64,7 +68,13 @@
                     <p class="text-green-600 font-bold text-md">$ {{ product.discount_price }}</p>
                     <p class="line-through text-gray-500 text-sm mb-3">$ {{ product.price }}</p>
                     <div class="flex justify-between">
-                        <button id={{product.id}} class="atc bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600">Add to Cart</button>
+                        <button 
+                            id="{{product.id}}" 
+                            class="atc bg-blue-500 text-white text-sm px-3 py-1 rounded hover:bg-blue-600" 
+                            data-name="{{ product.title }}" 
+                            data-price="{{ product.discount_price }}">
+                            Add to Cart
+                        </button>
                         <a href="{% url 'detail' product.id %}" class="bg-gray-200 text-sm px-3 py-1 rounded hover:bg-gray-300"> View Details </a>
                     </div>
                 </div>
@@ -92,36 +102,90 @@
 
 </body>
 <script type="text/javascript">
-    
+
     if(localStorage.getItem('cart') == null){
         var cart = {};
     } else {
         cart = JSON.parse(localStorage.getItem('cart'));
     }
 
+    // Map to store product info locally
+    let productInfo = {};
+
     $(document).on('click', '.atc', function(){
-        var item_id = this.id.toString();
+        const item_id = this.id.toString();
+        const item_name = $(this).data('name');
+        const item_price = $(this).data('price');
+
+        // Save product info if not already saved
+        if (!productInfo[item_id]) {
+            productInfo[item_id] = {
+                name: item_name,
+                price: item_price
+            };
+        }
 
         if(cart[item_id] != undefined){
-            cart[item_id] = cart[item_id] + 1;
+            cart[item_id] += 1;
         } else {
             cart[item_id] = 1;
         }
-        console.log(cart);
+
         localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem('productInfo', JSON.stringify(productInfo));
 
-        document.getElementById("nav-cart").innerHTML = "Cart(" + Object.keys(cart).length + ")";
-
-    })
-
-    // Update the nav-cart count on page load
-    document.addEventListener("DOMContentLoaded", function () {
-        if (localStorage.getItem('cart')) {
-            const cart = JSON.parse(localStorage.getItem('cart'));
-            document.getElementById("nav-cart").innerHTML = "Cart(" + Object.keys(cart).length + ")";
-        }
+        updateCartDisplay();
     });
 
+    // Update cart count on nav
+    function updateCartDisplay() {
+        document.getElementById("nav-cart").innerHTML = "Cart(" + Object.keys(cart).length + ")";
+    }
+
+    // Update cart popover content
+    function updateCartPopover() {
+        const popover = document.getElementById('cart-popover-content');
+        const cart = JSON.parse(localStorage.getItem('cart') || '{}');
+        const productInfo = JSON.parse(localStorage.getItem('productInfo') || '{}');
+
+        if (Object.keys(cart).length === 0) {
+            popover.innerHTML = `<p class="text-gray-500">Your cart is empty.</p>`;
+            return;
+        }
+
+        let content = '';
+        for (let id in cart) {
+            const quantity = cart[id];
+            const info = productInfo[id];
+
+            if (info) {
+                content += `<div class="flex justify-between">
+                    <span>${quantity}x ${info.name}</span>
+                    <span>$${(quantity * info.price).toFixed(2)}</span>
+                </div>`;
+            }
+        }
+
+        popover.innerHTML = content;
+    }
+
+    // Initial page load
+    document.addEventListener("DOMContentLoaded", function () {
+        if (localStorage.getItem('cart')) {
+            cart = JSON.parse(localStorage.getItem('cart'));
+            updateCartDisplay();
+        }
+
+        if (localStorage.getItem('productInfo')) {
+            productInfo = JSON.parse(localStorage.getItem('productInfo'));
+        }
+
+        // Listen to Alpine.js popover toggle
+        document.querySelector('#nav-cart').addEventListener('click', () => {
+            setTimeout(updateCartPopover, 50); // delay to wait for popover render
+        });
+    });
 
 </script>
+
 </html>
