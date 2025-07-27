@@ -29,8 +29,9 @@ def checkout(request):
         name = request.POST.get('name', "")
         email = request.POST.get('email', "")
         address = request.POST.get('address', "")
+        total_cost = request.POST.get('total_cost', 0)
 
-        order = Order(items=items, name=name, email=email, address=address)
+        order = Order(items=items, name=name, email=email, address=address, total_cost=total_cost)
         order.save()
 
     return render(request, 'shop/checkout.html')
