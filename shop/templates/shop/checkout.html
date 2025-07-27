@@ -27,6 +27,7 @@
       <h2 class="text-2xl font-bold mb-4">🚚 Shipping Information</h2>
       <form method="POST">
         {% csrf_token %}
+        <input type="hidden" name="items" id="items">
         <div class="mb-4">
           <label class="block mb-1 font-medium">Full Name</label>
           <input id="name" name="name" type="text" class="w-full border border-gray-300 rounded-lg p-2" required />
@@ -57,6 +58,7 @@
     const totalEl = document.getElementById('checkout-cart-total');
 
     let total = 0;
+    const cartData = [];
 
     if (Object.keys(cart).length === 0) {
       container.innerHTML = `<p class="text-gray-500">Your cart is empty.</p>`;
@@ -74,11 +76,19 @@
               <span>${quantity}x ${info.name}</span>
               <span>$${itemTotal.toFixed(2)}</span>
             </div>`;
+
+            // Prepare cartData for backend
+            cartData.push({
+            id: id,
+            name: info.name,
+            quantity: quantity,
+            price: info.price
+            });
         }
       }
     }
-
     totalEl.innerText = total.toFixed(2);
+    document.getElementById("items").value = JSON.stringify(cartData);
   </script>
 
 </body>
