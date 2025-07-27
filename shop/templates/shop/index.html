@@ -15,8 +15,6 @@
         <div class="text-xl font-bold">The Goods Co.</div>
 
         <div class="flex items-center space-x-6">
-            <a href="#" class="text-gray-700 hover:text-blue-600">Link1</a>
-            <a href="#" class="text-gray-700 hover:text-blue-600">Link2</a>
             <!-- Cart with Popover -->
             <div x-data="{ open: false }" class="relative">
                 <button @click="open = !open" class="text-gray-700 hover:text-blue-600 focus:outline-none" id="nav-cart">
@@ -165,6 +163,12 @@
                 </div>`;
             }
         }
+        content += `<div class="mt-4 text-right">
+                        <a href="/checkout/" class="inline-block bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition duration-200">
+                            Proceed to Checkout →
+                        </a>
+                    </div>`;
+
 
         popover.innerHTML = content;
     }

@@ -14,3 +14,10 @@ class Product(models.Model):
     image = models.CharField(max_length=300)
 
 
+class Order(models.Model):
+    items = models.CharField(max_length=200)
+    name = models.CharField(max_length=200)
+    email = models.CharField(max_length=100)
+    address = models.CharField(max_length=1000)
+
+
