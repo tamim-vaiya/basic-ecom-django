@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-*-6lf!m0h^)=3n=m41%bfqz4n7!1f$nu09&s3dvx2^*pb=%@ko
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['https://basic-ecom-django.onrender.com']
+ALLOWED_HOSTS = ['https://basic-ecom-django-deployed.onrender.com']
 
 
 # Application definition
